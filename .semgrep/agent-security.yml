@@ -1,0 +1,27 @@
+rules:
+  - id: agent-no-shell-interpolation
+    languages: [python]
+    severity: ERROR
+    message: Use an argument list with shell disabled at process boundaries.
+    pattern-either:
+      - pattern: subprocess.run(..., shell=True, ...)
+      - pattern: subprocess.Popen(..., shell=True, ...)
+      - pattern: subprocess.call(..., shell=True, ...)
+      - pattern: subprocess.check_call(..., shell=True, ...)
+      - pattern: subprocess.check_output(..., shell=True, ...)
+      - pattern: os.system(...)
+  - id: agent-no-dynamic-python
+    languages: [python]
+    severity: ERROR
+    message: Parse data rather than executing Python received as data.
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: exec(...)
+  - id: agent-verify-tls
+    languages: [python]
+    severity: ERROR
+    message: Retain TLS certificate verification for remote requests.
+    pattern-either:
+      - pattern: requests.$METHOD(..., verify=False, ...)
+      - pattern: httpx.$METHOD(..., verify=False, ...)
+      - pattern: ssl._create_unverified_context(...)

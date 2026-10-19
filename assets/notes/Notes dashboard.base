@@ -1,0 +1,13 @@
+filters:
+  and:
+    - 'file.inFolder("Projects/Agent Workflow")'
+    - 'file.ext == "md"'
+views:
+  - type: table
+    name: Project notes
+    order:
+      - file.name
+      - type
+      - status
+      - updated
+      - source

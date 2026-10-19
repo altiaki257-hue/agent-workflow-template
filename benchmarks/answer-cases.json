@@ -1,0 +1,23 @@
+[
+  {
+    "id": "Q1",
+    "evidence_scope": "repository",
+    "question": "Does this repository contain an application or deployment setup? What does its CI actually verify, and what remains unverified? Keep your answer under 180 words.",
+    "context": "Use repository evidence and name concrete paths. Do not assume CI has run for uncommitted changes.",
+    "criteria": ["Distinguishes workflow infrastructure from product application", "Identifies offline policy/security/link/syntax/regression checks", "Separates live inference/catalog/client checks from CI", "Does not claim uncommitted work passed remote CI or exhaustive secret detection"]
+  },
+  {
+    "id": "Q2",
+    "evidence_scope": "supplied",
+    "question": "For a workflow template with no application code, should a read-only research agent be allowed to execute python -m unittest automatically? Explain the security/quality tradeoff and a safe arrangement. Keep your answer under 180 words.",
+    "context": "The template has Python stdlib configuration/security/link tests. The researcher has read/search tools and shell/edit denied. Authorized implementers and CI can run tests. No application stack has been selected.",
+    "criteria": ["Recognizes test discovery/import executes arbitrary repository code", "Keeps researcher read-only", "Assigns execution to an authorized implementer or constrained CI", "Requires real test evidence and does not treat a test command as intrinsically safe"]
+  },
+  {
+    "id": "Q3",
+    "evidence_scope": "supplied",
+    "question": "In this hypothetical workflow, two editing agents use different feature branches inside the same working directory. Does that isolate their edits? Recommend the smallest reliable arrangement. Keep your answer under 180 words.",
+    "context": "Editing agents must preserve existing work. Emdash supports dedicated Git worktrees. Avoid unrelated process overhead for a small task.",
+    "criteria": ["Rejects branch-only working-directory isolation", "Explains shared files/index and checkout interference", "Recommends one worktree and branch per concurrent editor", "Offers serialization when separate worktrees are unavailable without inventing Git guarantees"]
+  }
+]

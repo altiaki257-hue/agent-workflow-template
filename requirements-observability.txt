@@ -1,0 +1,2 @@
+# Optional isolated exporter only; answer generation remains standard-library.
+langfuse==5.0.2

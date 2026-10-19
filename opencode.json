@@ -1,0 +1,225 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "openrouter/cohere/north-mini-code:free",
+  "small_model": "openrouter/cohere/north-mini-code:free",
+  "default_agent": "answer-coordinator",
+  "subagent_depth": 1,
+  "enabled_providers": [
+    "openrouter",
+    "groq",
+    "google"
+  ],
+  "share": "disabled",
+  "mcp": {
+    "answer_team": {
+      "type": "local",
+      "command": [
+        "python",
+        "scripts/answer_team.py",
+        "--mcp"
+      ],
+      "timeout": 300000,
+      "enabled": true
+    }
+  },
+  "provider": {
+    "openrouter": {
+      "whitelist": [
+        "nvidia/nemotron-3-ultra-550b-a55b:free",
+        "nvidia/nemotron-3.5-lightning:free",
+        "nvidia/nemotron-3-super-120b-a12b:free",
+        "thinkingmachines/inkling:free",
+        "cohere/north-mini-code:free"
+      ],
+      "models": {
+        "nvidia/nemotron-3-ultra-550b-a55b:free": {
+          "name": "Nemotron 3 Ultra (free)",
+          "options": {
+            "provider": {
+              "allow_fallbacks": false,
+              "max_price": {
+                "prompt": 0,
+                "completion": 0,
+                "request": 0
+              }
+            }
+          }
+        },
+        "nvidia/nemotron-3.5-lightning:free": {
+          "name": "Nemotron 3.5 Lightning (free)",
+          "options": {
+            "provider": {
+              "allow_fallbacks": false,
+              "max_price": {
+                "prompt": 0,
+                "completion": 0,
+                "request": 0
+              }
+            }
+          }
+        },
+        "thinkingmachines/inkling:free": {
+          "name": "Inkling (free)",
+          "options": {
+            "provider": {
+              "allow_fallbacks": false,
+              "max_price": {
+                "prompt": 0,
+                "completion": 0,
+                "request": 0
+              }
+            }
+          }
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "name": "Nemotron 3 Super (free)",
+          "options": {
+            "provider": {
+              "allow_fallbacks": false,
+              "max_price": {
+                "prompt": 0,
+                "completion": 0,
+                "request": 0
+              }
+            }
+          }
+        },
+        "cohere/north-mini-code:free": {
+          "name": "North Mini Code (free)",
+          "options": {
+            "provider": {
+              "allow_fallbacks": false,
+              "max_price": {
+                "prompt": 0,
+                "completion": 0,
+                "request": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "groq": {
+      "whitelist": [
+        "openai/gpt-oss-120b",
+        "qwen/qwen3.8-27b"
+      ],
+      "models": {
+        "openai/gpt-oss-120b": {
+          "name": "GPT-OSS 120B (Groq owner-confirmed free account)"
+        },
+        "qwen/qwen3.8-27b": {
+          "name": "Qwen 3.8 27B (Groq preview; owner-confirmed free account)"
+        }
+      }
+    },
+    "google": {
+      "whitelist": [
+        "gemini-3.1-flash-lite"
+      ],
+      "models": {
+        "gemini-3.1-flash-lite": {
+          "name": "Gemini 3.1 Flash-Lite (Google owner-confirmed free account)"
+        }
+      }
+    }
+  },
+  "permission": {
+    "*": "deny",
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "**/.env": "deny",
+      "**/.env.*": "deny",
+      "*.pem": "deny",
+      "*.key": "deny",
+      "*.p12": "deny",
+      "*.pfx": "deny",
+      "*.jks": "deny",
+      "*.keystore": "deny",
+      "*credentials*": "deny",
+      "*service-account*": "deny",
+      "*secrets.*": "deny",
+      "**/.aws/**": "deny",
+      "**/.ssh/**": "deny",
+      "**/.secrets/**": "deny",
+      "**/.netrc": "deny",
+      "**/.git/**": "deny",
+      "**/.npmrc": "deny",
+      "**/.pypirc": "deny",
+      "**/auth.json": "deny",
+      "**/settings.local.json": "deny",
+      "**/project.local.yml": "deny",
+      "*.env.example": "allow"
+    },
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "question": "allow",
+    "external_directory": "deny",
+    "edit": "deny",
+    "bash": "deny",
+    "task": "deny"
+  },
+  "agent": {
+    "build": {
+      "disable": true
+    },
+    "plan": {
+      "disable": true
+    },
+    "general": {
+      "disable": true
+    },
+    "explore": {
+      "disable": true
+    },
+    "answer-coordinator": {
+      "description": "Read-only answers: direct for simple questions, independent critique for substantive answers, research plus critique for complex questions",
+      "mode": "primary",
+      "model": "groq/openai/gpt-oss-120b",
+      "steps": 12,
+      "prompt": "{file:./.opencode/prompts/answer-coordinator.md}",
+      "permission": {
+        "answer_team_ask_team": "allow"
+      }
+    },
+    "answer-critic": {
+      "description": "Independent read-only check of factual accuracy, evidence, missing assumptions and practical usefulness",
+      "mode": "all",
+      "model": "groq/qwen/qwen3.8-27b",
+      "steps": 6,
+      "prompt": "{file:./.opencode/prompts/answer-critic.md}"
+    },
+    "researcher": {
+      "description": "Read-only targeted repository research; web requests require approval",
+      "mode": "all",
+      "model": "google/gemini-3.1-flash-lite",
+      "steps": 12,
+      "prompt": "{file:./.opencode/prompts/researcher.md}",
+      "permission": {
+        "webfetch": "ask",
+        "websearch": "ask"
+      }
+    },
+    "test-designer": {
+      "description": "Read-only test design; an approved implementer executes tests",
+      "mode": "all",
+      "model": "openrouter/cohere/north-mini-code:free",
+      "steps": 10,
+      "prompt": "{file:./.opencode/prompts/test-designer.md}"
+    },
+    "junior-developer": {
+      "description": "Scoped documentation and routine edits; every edit and shell command requires approval",
+      "mode": "all",
+      "model": "groq/qwen/qwen3.8-27b",
+      "steps": 12,
+      "prompt": "{file:./.opencode/prompts/junior-developer.md}",
+      "permission": {
+        "edit": "ask",
+        "bash": "ask"
+      }
+    }
+  }
+}

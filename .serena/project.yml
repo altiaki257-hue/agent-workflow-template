@@ -1,0 +1,46 @@
+# Serena 2.0: concise, read-only retrieval. Keep all loader fields to avoid startup rewrites.
+project_name: "Project"
+language_servers: [python]
+encoding: "utf-8"
+line_ending: "lf"
+
+# Index actual code only; documentation remains available to targeted file reads.
+ls_workspace_folders: [scripts, tests]
+ignore_all_files_in_gitignore: true
+ignored_paths:
+  - ".git/**"
+  - ".serena/**"
+  - ".worktrees/**"
+  - "**/node_modules/**"
+  - "**/.venv/**"
+  - "**/__pycache__/**"
+
+# Standard tools avoid the unsandboxed Python REPL; expose read-only retrieval.
+read_only: true
+agent_interface: tools
+language_backend: null
+symbol_info_budget: null
+
+# Git-backed project memory replaces Serena memories and onboarding.
+# Do not inherit editing/interactive mode prompts from the global defaults.
+default_modes: [no-memories]
+added_modes: []
+initial_prompt: >-
+  Follow AGENTS.md; use a task contract only for assigned implementation work.
+  Memory: docs/, tasks/contracts/, tasks/handoffs/. Use symbol overviews and
+  references before bodies; retrieve only relevant symbols and bounded text.
+  Reuse prior evidence; do not reread whole files or scan unrelated folders.
+  Report concise findings with paths; never read ignored secrets or store chat memory.
+
+# Preserve context defaults; do not enable optional tools or additional workspaces.
+included_apis: []
+excluded_apis: []
+excluded_tools: []
+included_optional_tools: []
+fixed_tools: []
+read_only_memory_patterns: []
+ignored_memory_patterns: []
+ls_specific_settings: {}
+ls_additional_workspace_folders: []
+activation_command: null
+activation_command_timeout: 180.0
