@@ -1,0 +1,500 @@
+{
+  "schema_version": 1,
+  "task": "SKILLS-001",
+  "installed_on": "2026-10-25",
+  "upstream": {
+    "repository": "https://github.com/openai/skills",
+    "commit": "49f948faa9258a0c61caceaf225e179651397431",
+    "catalog_count": 39
+  },
+  "imported_skills": [
+    {
+      "name": "gh-fix-ci",
+      "source_path": "skills/.curated/gh-fix-ci",
+      "license": "LICENSE.txt",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "upstream_sha256": "36f73b9450504983d1647c960689596f59bf9147c14b1b43162912ed7ada9af6",
+          "installed_sha256": "36f73b9450504983d1647c960689596f59bf9147c14b1b43162912ed7ada9af6",
+          "locally_modified": false
+        },
+        {
+          "path": "assets/github-small.svg",
+          "upstream_sha256": "ee05e92d373d4d84f4612af3c1090ef67698d421bbe30896a4ed5a00cb86a069",
+          "installed_sha256": "ee05e92d373d4d84f4612af3c1090ef67698d421bbe30896a4ed5a00cb86a069",
+          "locally_modified": false
+        },
+        {
+          "path": "assets/github.png",
+          "upstream_sha256": "d55a9baa41798d8b5108e3058df3a5bda09914ea9fd73b49929cc38a8832424f",
+          "installed_sha256": "d55a9baa41798d8b5108e3058df3a5bda09914ea9fd73b49929cc38a8832424f",
+          "locally_modified": false
+        },
+        {
+          "path": "LICENSE.txt",
+          "upstream_sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+          "installed_sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+          "locally_modified": false
+        },
+        {
+          "path": "scripts/inspect_pr_checks.py",
+          "upstream_sha256": "9459e5b03f86785d184a83e5cd8d621b832e918ec04158a2962d867785812c6c",
+          "installed_sha256": "9459e5b03f86785d184a83e5cd8d621b832e918ec04158a2962d867785812c6c",
+          "locally_modified": false
+        },
+        {
+          "path": "SKILL.md",
+          "upstream_sha256": "7b326b4a2f0f5f85122144628ec02077e48841e0e0e82efce88b3415bcfb7c26",
+          "installed_sha256": "66b473fa3f0df98f1ca26c3b3e578201535d097fa98820f38f9bc7fff59d845e",
+          "locally_modified": true
+        }
+      ]
+    },
+    {
+      "name": "gh-address-comments",
+      "source_path": "skills/.curated/gh-address-comments",
+      "license": "LICENSE.txt",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "upstream_sha256": "12cf845a78254dde85e60eefb45a60e6ce2129d321f3e1d691d4ebca9a140861",
+          "installed_sha256": "12cf845a78254dde85e60eefb45a60e6ce2129d321f3e1d691d4ebca9a140861",
+          "locally_modified": false
+        },
+        {
+          "path": "assets/github-small.svg",
+          "upstream_sha256": "ee05e92d373d4d84f4612af3c1090ef67698d421bbe30896a4ed5a00cb86a069",
+          "installed_sha256": "ee05e92d373d4d84f4612af3c1090ef67698d421bbe30896a4ed5a00cb86a069",
+          "locally_modified": false
+        },
+        {
+          "path": "assets/github.png",
+          "upstream_sha256": "d55a9baa41798d8b5108e3058df3a5bda09914ea9fd73b49929cc38a8832424f",
+          "installed_sha256": "d55a9baa41798d8b5108e3058df3a5bda09914ea9fd73b49929cc38a8832424f",
+          "locally_modified": false
+        },
+        {
+          "path": "LICENSE.txt",
+          "upstream_sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+          "installed_sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+          "locally_modified": false
+        },
+        {
+          "path": "scripts/fetch_comments.py",
+          "upstream_sha256": "d7bc64f6b26f7482f9ca9dd7c923a5b8b20e1ef13491ae2d9052cd208a7c1ad1",
+          "installed_sha256": "d7bc64f6b26f7482f9ca9dd7c923a5b8b20e1ef13491ae2d9052cd208a7c1ad1",
+          "locally_modified": false
+        },
+        {
+          "path": "SKILL.md",
+          "upstream_sha256": "77389eefd3fb6584210668ca8e43f4b8de87e7722ddd953474bc9e24cdfaaedd",
+          "installed_sha256": "1a254c2e394253e4cee9c94b929a815e56bee862c714769f2cc2b2532a71c4f1",
+          "locally_modified": true
+        }
+      ]
+    },
+    {
+      "name": "security-threat-model",
+      "source_path": "skills/.curated/security-threat-model",
+      "license": "LICENSE.txt",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "upstream_sha256": "3319b59736312abceca614e341c0e59cae47263e3b58a22b2b5ddf1e5fc8c227",
+          "installed_sha256": "3319b59736312abceca614e341c0e59cae47263e3b58a22b2b5ddf1e5fc8c227",
+          "locally_modified": false
+        },
+        {
+          "path": "LICENSE.txt",
+          "upstream_sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+          "installed_sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+          "locally_modified": false
+        },
+        {
+          "path": "references/prompt-template.md",
+          "upstream_sha256": "81a59aa3fb3ac3a739d6a26ab38e4015965f215581ee54becef21a2b121ec29b",
+          "installed_sha256": "688470d4405648421dfaf2d773d4dbfd3a444239d6a74a0c6bce33eb1ac0ae5c",
+          "locally_modified": true
+        },
+        {
+          "path": "references/security-controls-and-assets.md",
+          "upstream_sha256": "d536cfa9acad2523dc39134bcf33b9566c29dd9a57b407cbc9901637230c6b98",
+          "installed_sha256": "d536cfa9acad2523dc39134bcf33b9566c29dd9a57b407cbc9901637230c6b98",
+          "locally_modified": false
+        },
+        {
+          "path": "SKILL.md",
+          "upstream_sha256": "1283c0dd62a8104d9edda4583569b5d8510b4ddaa45120687c999250fd96bad2",
+          "installed_sha256": "6969ec1f9c9637fbbd3dc9fd7bd8c08533b671b2909fec896be98b520088d233",
+          "locally_modified": true
+        }
+      ]
+    },
+    {
+      "name": "security-best-practices",
+      "source_path": "skills/.curated/security-best-practices",
+      "license": "LICENSE.txt",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "upstream_sha256": "6e9c6f2edce448eb2b589f81ad6e3f722665021785513bcbfd0bf7b86b529171",
+          "installed_sha256": "6e9c6f2edce448eb2b589f81ad6e3f722665021785513bcbfd0bf7b86b529171",
+          "locally_modified": false
+        },
+        {
+          "path": "LICENSE.txt",
+          "upstream_sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+          "installed_sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+          "locally_modified": false
+        },
+        {
+          "path": "references/golang-general-backend-security.md",
+          "upstream_sha256": "a73c47c34497b120672d48411fe51dc90d426a571801a0b3f649e2ce4ec658b4",
+          "installed_sha256": "694c80f40e8f1f521a8796edf1c953593a99736e07abb47b33eda29ff272d24e",
+          "locally_modified": true
+        },
+        {
+          "path": "references/javascript-express-web-server-security.md",
+          "upstream_sha256": "427835cbb5be7ba96172ea6ca9af80ddd4419c833e9ebf870996740c80d8406c",
+          "installed_sha256": "5f2e29bec275f8ba76789cf9cd4845c7b3096a0caea90c91bc76f6810d90a867",
+          "locally_modified": true
+        },
+        {
+          "path": "references/javascript-general-web-frontend-security.md",
+          "upstream_sha256": "3a7bc7b3f6e7ff043db9dbaa8933894d7a19d987d0607e4ddae5d70184a63d63",
+          "installed_sha256": "11ad70ddb982405042d254ae6bbcd313b6f1ed77efe09298204e04a034ffdf10",
+          "locally_modified": true
+        },
+        {
+          "path": "references/javascript-jquery-web-frontend-security.md",
+          "upstream_sha256": "bcbad2fa6c2a02709e47e889e70102c76886bf36bc798624d27db570eccf40da",
+          "installed_sha256": "bcbad2fa6c2a02709e47e889e70102c76886bf36bc798624d27db570eccf40da",
+          "locally_modified": false
+        },
+        {
+          "path": "references/javascript-typescript-nextjs-web-server-security.md",
+          "upstream_sha256": "71c773f7a97ce60c853adfa100b3d88b3b7bc4c6b8acaef1432ffabd923ee182",
+          "installed_sha256": "71c773f7a97ce60c853adfa100b3d88b3b7bc4c6b8acaef1432ffabd923ee182",
+          "locally_modified": false
+        },
+        {
+          "path": "references/javascript-typescript-react-web-frontend-security.md",
+          "upstream_sha256": "d3030c0f24bddb56b9bbb91bbec1ee49eb7778bce4d3e0297b2641b2fc6b0d9c",
+          "installed_sha256": "1790418407eedb51e748bc44bf06a2f5e896d469f5f6b8050c61c56e6045b008",
+          "locally_modified": true
+        },
+        {
+          "path": "references/javascript-typescript-vue-web-frontend-security.md",
+          "upstream_sha256": "77c6a747f9f17e3df03aad0fcb20d99ac7898001b81aef8b80908e45ac14a688",
+          "installed_sha256": "77c6a747f9f17e3df03aad0fcb20d99ac7898001b81aef8b80908e45ac14a688",
+          "locally_modified": false
+        },
+        {
+          "path": "references/python-django-web-server-security.md",
+          "upstream_sha256": "4fb69b5d45f10e588d1a8c35cdc5f59e18910f6b46a93e2d342d90f286f8dfd2",
+          "installed_sha256": "703a848fa1be93bb20373f5d5002cc35996a6e3eb39c6e650258489478422a1d",
+          "locally_modified": true
+        },
+        {
+          "path": "references/python-fastapi-web-server-security.md",
+          "upstream_sha256": "7383c7f4fc271190b05e562ada7e825982a2c76b6c79a9f95a1da7687b65a616",
+          "installed_sha256": "7383c7f4fc271190b05e562ada7e825982a2c76b6c79a9f95a1da7687b65a616",
+          "locally_modified": false
+        },
+        {
+          "path": "references/python-flask-web-server-security.md",
+          "upstream_sha256": "9606d69190c04c167fdeac57e61297547a57b0542fd89dede36f355970446929",
+          "installed_sha256": "48e0025a75bd96dcd6f8cc9cd7c0e043002a1661b86346681a39633d57a2bd61",
+          "locally_modified": true
+        },
+        {
+          "path": "SKILL.md",
+          "upstream_sha256": "7b3dae1ffc5434d890f3c65c8f552af52d0307fab3b35dec13013c9ca3844c4f",
+          "installed_sha256": "b30d59f945cab6eb6ad124537e7be5f3a9eb60c8af2683150140d88ddeb0e6a9",
+          "locally_modified": true
+        }
+      ]
+    },
+    {
+      "name": "screenshot",
+      "source_path": "skills/.curated/screenshot",
+      "license": "LICENSE.txt",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "upstream_sha256": "f29638eb930e27d44846474620b0d817b4b77fb5d09caf27db269463ae45cfa8",
+          "installed_sha256": "f29638eb930e27d44846474620b0d817b4b77fb5d09caf27db269463ae45cfa8",
+          "locally_modified": false
+        },
+        {
+          "path": "assets/screenshot-small.svg",
+          "upstream_sha256": "b0ff24097dfcd889504fab312a0e20d1d79dde0745268647a8cc2471b4baf794",
+          "installed_sha256": "b0ff24097dfcd889504fab312a0e20d1d79dde0745268647a8cc2471b4baf794",
+          "locally_modified": false
+        },
+        {
+          "path": "assets/screenshot.png",
+          "upstream_sha256": "4ff96a476f2a2ac4ca7b626f9d4b78a7aa8cce0219e0688c5f15355513b61b5b",
+          "installed_sha256": "4ff96a476f2a2ac4ca7b626f9d4b78a7aa8cce0219e0688c5f15355513b61b5b",
+          "locally_modified": false
+        },
+        {
+          "path": "LICENSE.txt",
+          "upstream_sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+          "installed_sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+          "locally_modified": false
+        },
+        {
+          "path": "references/macos-linux.md",
+          "upstream_sha256": null,
+          "installed_sha256": "4a0eed7274e0144ceda4e2acc777767d6c47083e87c911d119ffb86935f44a65",
+          "locally_modified": true
+        },
+        {
+          "path": "references/windows.md",
+          "upstream_sha256": null,
+          "installed_sha256": "ada8f2adf872685ea8080aa556f863e2aa0dbfc38c6588f58ecd5880b6185d6f",
+          "locally_modified": true
+        },
+        {
+          "path": "scripts/ensure_macos_permissions.sh",
+          "upstream_sha256": "9aa750f1e9592519d6c18b966fd65c1d4108c25bd3471ce625dfafd784856d7f",
+          "installed_sha256": "9aa750f1e9592519d6c18b966fd65c1d4108c25bd3471ce625dfafd784856d7f",
+          "locally_modified": false
+        },
+        {
+          "path": "scripts/macos_display_info.swift",
+          "upstream_sha256": "0969cfef9c9890c82cae5ad75a6cd40fd56d33b28f27347642ef5e837f18b042",
+          "installed_sha256": "0969cfef9c9890c82cae5ad75a6cd40fd56d33b28f27347642ef5e837f18b042",
+          "locally_modified": false
+        },
+        {
+          "path": "scripts/macos_permissions.swift",
+          "upstream_sha256": "cf110651350e50d600268f0a1a892ac8d662505474b4455cdfde2ac5b5f4aca6",
+          "installed_sha256": "cf110651350e50d600268f0a1a892ac8d662505474b4455cdfde2ac5b5f4aca6",
+          "locally_modified": false
+        },
+        {
+          "path": "scripts/macos_window_info.swift",
+          "upstream_sha256": "c7faff7913d6072284b7ef1e5d26c524ab861ad32afc0c066f24ba95ae3f3597",
+          "installed_sha256": "c7faff7913d6072284b7ef1e5d26c524ab861ad32afc0c066f24ba95ae3f3597",
+          "locally_modified": false
+        },
+        {
+          "path": "scripts/take_screenshot.ps1",
+          "upstream_sha256": "a31a2242e41fd1c5471651afbcced660f98fbc884f11e531218348f700a3f826",
+          "installed_sha256": "ef34ee24d66d013ca94ea16190fc3abb6f7821c1742f0554e56395cb1c9ad6f2",
+          "locally_modified": true
+        },
+        {
+          "path": "scripts/take_screenshot.py",
+          "upstream_sha256": "56eeabe2dac5d23915b9a0fb57a07431fad2d310c5444f60f71f09299899232b",
+          "installed_sha256": "02607f193f33419f3d2b0def0dfc37a5b59315cb541042d7ce448cb57415f586",
+          "locally_modified": true
+        },
+        {
+          "path": "SKILL.md",
+          "upstream_sha256": "081935a6a163277537d46365f49d6b4a3cb40b4748347e7e88759c5927fa8cf5",
+          "installed_sha256": "d686d67e7008bc1febbf124f36084f1d2ecdd49d313a9bbee73b537b92d4387a",
+          "locally_modified": true
+        }
+      ]
+    },
+    {
+      "name": "yeet",
+      "source_path": "skills/.curated/yeet",
+      "license": "LICENSE.txt",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "upstream_sha256": "6f0a463b53232932ad70aec529e25fad9d54312de0bd29d64a38bb14a4e748de",
+          "installed_sha256": "6f0a463b53232932ad70aec529e25fad9d54312de0bd29d64a38bb14a4e748de",
+          "locally_modified": false
+        },
+        {
+          "path": "assets/yeet-small.svg",
+          "upstream_sha256": "e4b365d5389b8772e9bad36ad7a37d8333436fa961bb98c8d77b8fbf4e9dbc3b",
+          "installed_sha256": "e4b365d5389b8772e9bad36ad7a37d8333436fa961bb98c8d77b8fbf4e9dbc3b",
+          "locally_modified": false
+        },
+        {
+          "path": "assets/yeet.png",
+          "upstream_sha256": "6b5448b6c5b3480ca7511f983fa81ced59e6b9c664332bc559ea0d323fc06ab8",
+          "installed_sha256": "6b5448b6c5b3480ca7511f983fa81ced59e6b9c664332bc559ea0d323fc06ab8",
+          "locally_modified": false
+        },
+        {
+          "path": "LICENSE.txt",
+          "upstream_sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+          "installed_sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+          "locally_modified": false
+        },
+        {
+          "path": "SKILL.md",
+          "upstream_sha256": "4829d4909081e1abf91507fb581e6f566ce7064001892414f32191895b08a595",
+          "installed_sha256": "a7dcefd3677c60bfabdb8ed6752fba5a4396da905e2e399da0b88d9481a69582",
+          "locally_modified": true
+        }
+      ]
+    }
+  ],
+  "custom_skills": [
+    {
+      "name": "repo-quality",
+      "path": ".agents/skills/repo-quality/SKILL.md",
+      "sha256": "7fd4ec564aada9de8456438af78cf2b5dfba45c8ff3ab5b4c04ccb7633da6fc0"
+    },
+    {
+      "name": "task-handoff",
+      "path": ".agents/skills/task-handoff/SKILL.md",
+      "sha256": "17e4efe6948cbc35fa9b7663cc59ca563b9b365f466b4adc8a9821e11906d705"
+    },
+    {
+      "name": "task-contract",
+      "path": ".agents/skills/task-contract/SKILL.md",
+      "sha256": "f045f8db1f34f28af5c6b2d8b8faf9ba704e222c3453e8eca66db4d41e9609d0"
+    },
+    {
+      "name": "repo-navigation",
+      "path": ".agents/skills/repo-navigation/SKILL.md",
+      "sha256": "d6b17d798172cb97ae6ab325a26b0c76d349cac564cdfd957c6b9686434f64c3"
+    },
+    {
+      "name": "regression-debugging",
+      "path": ".agents/skills/regression-debugging/SKILL.md",
+      "sha256": "be29256683bf844f22884314554c1af3b3773a6e0ed1debbb0e689840664fba3"
+    },
+    {
+      "name": "contract-review",
+      "path": ".agents/skills/contract-review/SKILL.md",
+      "sha256": "1095fe27814183cae343a00c4c68b86608c00de1c3891d2beedad85254281534"
+    },
+    {
+      "name": "answer-research",
+      "path": ".agents/skills/answer-research/SKILL.md",
+      "sha256": "5f7e3b891e6bbac0419721f87290cbe42902d1d5d9122a4d48d6dd305338f40e"
+    },
+    {
+      "name": "evaluation-analysis",
+      "path": ".agents/skills/evaluation-analysis/SKILL.md",
+      "sha256": "7b99a5db68b55db2cdc6088dd8f73dcad167bc0ddd1217d8f82ca1ffbe95b43b"
+    }
+  ],
+  "claude_wrappers": [
+    {
+      "name": "answer-research",
+      "path": ".claude/skills/answer-research/SKILL.md",
+      "sha256": "57b879bd91120a17144d56e6e41fcd2dbf3ad2d07ecbd6277e6ee32c9068a5ea"
+    },
+    {
+      "name": "contract-review",
+      "path": ".claude/skills/contract-review/SKILL.md",
+      "sha256": "94498d41b0e777de2c73d20174e6426b5b10762b13f14a6877e6b6a833988a9e"
+    },
+    {
+      "name": "evaluation-analysis",
+      "path": ".claude/skills/evaluation-analysis/SKILL.md",
+      "sha256": "8191dd07840818ece3b2c4d25f37bd74121089c15d6c7df5e18219690c2f70ff"
+    },
+    {
+      "name": "gh-address-comments",
+      "path": ".claude/skills/gh-address-comments/SKILL.md",
+      "sha256": "477c98a1cf587fa6cd316b6dba2e8a9959d93bd4b42e686187877155e3daab0e"
+    },
+    {
+      "name": "gh-fix-ci",
+      "path": ".claude/skills/gh-fix-ci/SKILL.md",
+      "sha256": "774e3ef2d3aa065b63067183f2c1ca76f53be9bb0d7d71da2ac0bbb6d4d83ecf"
+    },
+    {
+      "name": "regression-debugging",
+      "path": ".claude/skills/regression-debugging/SKILL.md",
+      "sha256": "975ac67bc5404c546a8b309b6b55d0f5e4fa3f0b2ca04d9bd1b5a941999cf261"
+    },
+    {
+      "name": "repo-navigation",
+      "path": ".claude/skills/repo-navigation/SKILL.md",
+      "sha256": "ac1dffd97416d754faef3c8380cc4d2678bc140495eceedfc8604774d8e8d261"
+    },
+    {
+      "name": "repo-quality",
+      "path": ".claude/skills/repo-quality/SKILL.md",
+      "sha256": "8c019c03b0624d111eb0e9c5ae7b0bbf2c50cc27a3afb75d0a8fc6e8f9c48d22"
+    },
+    {
+      "name": "screenshot",
+      "path": ".claude/skills/screenshot/SKILL.md",
+      "sha256": "85c7d2a51e955ac8a8e07243e4f2a206fb35edff4d6fae49771a09c184d6d4e7"
+    },
+    {
+      "name": "security-best-practices",
+      "path": ".claude/skills/security-best-practices/SKILL.md",
+      "sha256": "7a1f0b71ea0e898d47f29b26e3a6cbe5d9234a50e13b35fd1cc61430cf07c00c"
+    },
+    {
+      "name": "security-threat-model",
+      "path": ".claude/skills/security-threat-model/SKILL.md",
+      "sha256": "04f55a5b1a2f953ee253b7e49fc3f48ab358aeb07e2424db22bf294ccb0c0d96"
+    },
+    {
+      "name": "task-contract",
+      "path": ".claude/skills/task-contract/SKILL.md",
+      "sha256": "ba100be20f0c68a5122301aa7b4712c7db4fa1d4aca94f45c38898e9b1ed085c"
+    },
+    {
+      "name": "task-handoff",
+      "path": ".claude/skills/task-handoff/SKILL.md",
+      "sha256": "baf3356cfa29a1a7e20d8c7dbf57e573ff2a2c47b8fd355a418a909472269ed2"
+    },
+    {
+      "name": "yeet",
+      "path": ".claude/skills/yeet/SKILL.md",
+      "sha256": "481f08538d0831eec3b349b6eb71a7d5032613b812768e6fd1db1f1737227581"
+    }
+  ],
+  "deferred_upstream_skills": [
+    "aspnet-core",
+    "chatgpt-apps",
+    "cli-creator",
+    "cloudflare-deploy",
+    "define-goal",
+    "figma",
+    "figma-code-connect-components",
+    "figma-create-design-system-rules",
+    "figma-create-new-file",
+    "figma-generate-design",
+    "figma-generate-library",
+    "figma-implement-design",
+    "figma-use",
+    "hatch-pet",
+    "jupyter-notebook",
+    "linear",
+    "migrate-to-codex",
+    "netlify-deploy",
+    "notion-knowledge-capture",
+    "notion-meeting-intelligence",
+    "notion-research-documentation",
+    "notion-spec-to-implementation",
+    "openai-docs",
+    "pdf",
+    "playwright",
+    "playwright-interactive",
+    "render-deploy",
+    "security-ownership-map",
+    "sentry",
+    "speech",
+    "transcribe",
+    "vercel-deploy",
+    "winui-app"
+  ],
+  "github_cli": {
+    "version": "v2.103.2",
+    "archive": "gh_2.103.2_windows_amd64.zip",
+    "sha256": "fef9fcdd8fdabd0501ab8b3d99eac976f504ab55d01bef9e8ef428a5d900ddda",
+    "checksum_verified": true,
+    "windows_path": "%LOCALAPPDATA%/Programs/GitHub CLI/bin/gh.exe",
+    "persistent_path_changed": false,
+    "existing_authentication_verified": true
+  }
+}

@@ -2,6 +2,8 @@
 
 A reusable foundation for an Emdash, Claude Code, Codex and OpenCode workflow. Includes scoped task contracts, read-only research/critique tooling, policy checks, tests, optional Obsidian archiving and opt-in Remotely Save dispatch.
 
+The archive supports stable chronological filenames and migration that preserves annotations. Fourteen additional [agent skills](docs/agent-skills.md) cover navigation, debugging, checks, research, reviews and explicitly authorized publishing.
+
 This is a sanitized source snapshot, with no original Git history, remotes, personal task records, chat archive, credentials or machine configuration. Nothing is connected or pre-authorized on a new machine. See [public-copy audit](PUBLIC-AUDIT.md).
 
 ## Setup

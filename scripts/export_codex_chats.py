@@ -11,17 +11,19 @@ import subprocess
 import sys
 import tempfile
 import time
+import unicodedata
 from contextlib import closing, contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import quote
+from typing import Literal, NotRequired, TypedDict
 
 OWNER = "codex-obsidian-export-v1"
-FORMAT_VERSION = 3
+FORMAT_VERSION = 4
+FILENAME_VERSION = 1
 SESSION_ID = re.compile(r"[A-Za-z0-9_-]{1,128}\Z")
 TOKEN = re.compile(
-    r"\b(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|(?:AKIA|ASIA)[A-Z0-9]{16})\b"
+    r"\b(?:sk-[A-Za-z0-9_-]{20,}|gsk_[A-Za-z0-9_-]{20,}|AIza[A-Za-z0-9_-]{35}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|(?:AKIA|ASIA)[A-Z0-9]{16})\b"
 )
 PRIVATE_KEY = re.compile(
     r"-----BEGIN ([A-Z ]*PRIVATE KEY)-----.*?-----END \1-----", re.DOTALL
@@ -43,6 +45,24 @@ class Conversation:
     messages: list
     malformed: int = 0
     agent: str = ""
+
+
+class ExportState(TypedDict):
+    files: dict[str, dict]
+    remote_sync_pending: NotRequired[bool]
+
+
+class ExportCounts(TypedDict):
+    updated: int
+    unchanged: int
+    errors: int
+    renamed: int
+    unsupported_emdash: int
+    metadata_unavailable: int
+    partial_transcripts: int
+    emdash_without_local_transcript: NotRequired[int]
+    notes: NotRequired[int]
+    remote_sync: NotRequired[Literal["deferred", "requested", "unchanged"]]
 
 
 def redact(text):
@@ -305,8 +325,72 @@ def managed_write(path, identity, generated):
     return True
 
 
+def created_time(value):
+    """Normalize timestamps for deterministic chronological names across machines."""
+    try:
+        stamp = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        if stamp.tzinfo is None:
+            stamp = stamp.replace(tzinfo=timezone.utc)
+        return stamp.astimezone(timezone.utc)
+    except (AttributeError, TypeError, ValueError, OverflowError):
+        return None
+
+
+def readable_filename(created, title, session_id):
+    stamp = created_time(created)
+    prefix = stamp.strftime("%Y-%m-%d %H-%M-%S UTC") if stamp else "Undated"
+    title = re.sub(r"https?://\S+", "link", redact(str(title)))
+    title = "".join(" " if unicodedata.category(c).startswith("C") else c for c in title)
+    title = re.sub(r'[<>:"/\\|?*\[\]#^]', " ", title)
+    title = " ".join(title.split())[:64].rstrip(" .-_") or "Conversation"
+    while len(title.encode("utf-8")) > 128:
+        title = title[:-1].rstrip(" .-_")
+    identity = hashlib.sha256(session_id.encode()).hexdigest()[:8]
+    return f"{prefix} - {title} - {identity}.md"
+
+
+def owned_note_text(path, session_id):
+    text = path.read_text(encoding="utf-8")
+    begin = f"<!-- {OWNER}:begin {session_id} -->"
+    end = f"<!-- {OWNER}:end {session_id} -->"
+    if text.count(begin) != 1 or text.count(end) != 1 or text.index(end) < text.index(begin):
+        raise ArchiveError("note ownership markers are invalid; left unchanged")
+    return text
+
+
+def name_note(archive, entry, session_id, title, created, rename_note=None):
+    """Move an owned legacy note without replacing any existing destination."""
+    filename = (
+        entry["file"]
+        if entry.get("filename_version") == FILENAME_VERSION
+        else readable_filename(created, title, session_id)
+    )
+    old = safe_path(archive, entry.get("file", session_id + ".md"))
+    new = safe_path(archive, filename)
+    renamed = False
+    if old != new and old.exists():
+        owned_note_text(old, session_id)
+        if new.exists():
+            raise ArchiveError("rename destination already exists; both notes preserved")
+        if rename_note is not None:
+            rename_note(old, new)
+            if old.exists() or not new.is_file():
+                raise ArchiveError("note rename did not complete")
+        else:
+            # Publish without replacement, then remove only the original directory entry.
+            os.link(old, new)
+            old.unlink()
+        renamed = True
+    return filename, renamed
+
+
 def render(conversation, label):
-    title = label.get("title") or conversation.agent or "Codex conversation"
+    first_question = next(
+        (body for role, body, _ in conversation.messages if role == "user" and body.strip()),
+        "",
+    )
+    fallback = next((line.strip() for line in first_question.splitlines() if line.strip()), "")
+    title = label.get("title") or fallback[:100] or conversation.agent or "Codex conversation"
     title = redact(" ".join(str(title).split()))
     fields = {
         "session_id": conversation.session_id,
@@ -411,7 +495,7 @@ def request_remote_sync(vault):
         return "deferred"
 
 
-def sync(config):
+def sync(config, *, rename_note=None):
     vault = Path(config["vault"])
     if not vault.is_dir():
         raise ArchiveError("configured vault does not exist")
@@ -419,7 +503,7 @@ def sync(config):
     state_root = Path(config["state_dir"])
     state_path = safe_path(state_root, "manifest.json")
     with run_lock(safe_path(state_root, "export.lock")):
-        state = (
+        state: ExportState = (
             json.loads(state_path.read_text(encoding="utf-8"))
             if state_path.exists()
             else {"files": {}}
@@ -427,10 +511,11 @@ def sync(config):
         labels, unsupported, unavailable = emdash_metadata(
             config.get("emdash_databases", [])
         )
-        counts = {
+        counts: ExportCounts = {
             "updated": 0,
             "unchanged": 0,
             "errors": 0,
+            "renamed": 0,
             "unsupported_emdash": unsupported,
             "metadata_unavailable": unavailable,
             "partial_transcripts": 0,
@@ -487,14 +572,18 @@ def sync(config):
                     continue
                 active_ids.add(conversation.session_id)
                 fingerprint = signature(conversation.session_id)
-                filename = conversation.session_id + ".md"
                 content, title = render(
                     conversation, labels.get(conversation.session_id, {})
+                )
+                filename, renamed = name_note(
+                    archive, entry, conversation.session_id, title, conversation.created,
+                    rename_note,
                 )
                 changed = managed_write(
                     safe_path(archive, filename), conversation.session_id, content
                 )
-                counts["updated" if changed else "unchanged"] += 1
+                counts["renamed"] += int(renamed)
+                counts["updated" if changed or renamed else "unchanged"] += 1
                 if conversation.malformed:
                     counts["partial_transcripts"] += 1
                 state["files"][key] = {
@@ -502,6 +591,8 @@ def sync(config):
                     "session_id": conversation.session_id,
                     "file": filename,
                     "title": title,
+                    "created": conversation.created,
+                    "filename_version": FILENAME_VERSION,
                     "messages": len(conversation.messages),
                 }
                 selected_entries[conversation.session_id] = state["files"][key]
@@ -513,6 +604,32 @@ def sync(config):
             if "session_id" in entry
         }
         notes.update(selected_entries)
+        # Retain and migrate owned notes even if their source transcript was removed.
+        for session_id, entry in notes.items():
+            if (
+                entry.get("filename_version") != FILENAME_VERSION
+                and session_id not in active_ids
+            ):
+                try:
+                    old = safe_path(archive, entry["file"])
+                    text = owned_note_text(old, session_id)
+                    match = re.search(r"^- \*\*Created:\*\* (.+)$", text, re.MULTILINE)
+                    created = entry.get("created") or (match[1] if match else "")
+                    filename, renamed = name_note(
+                        archive, entry, session_id, entry["title"], created, rename_note
+                    )
+                    entry.update(
+                        file=filename, created=created, filename_version=FILENAME_VERSION
+                    )
+                    counts["renamed"] += int(renamed)
+                    counts["updated"] += int(renamed)
+                except (ArchiveError, OSError, ValueError, TypeError, KeyError):
+                    counts["errors"] += 1
+            for cached in state["files"].values():
+                if cached.get("session_id") == session_id:
+                    for field in ("file", "created", "filename_version"):
+                        if field in entry:
+                            cached[field] = entry[field]
         counts["emdash_without_local_transcript"] = len(set(labels) - set(notes))
         lines = [
             "# Codex and Emdash conversations",
@@ -528,10 +645,19 @@ def sync(config):
             "Each note has a Personal notes section that the exporter preserves.",
             "",
         ]
-        for session_id, entry in sorted(notes.items()):
-            title = entry["title"].replace("[", "\\[").replace("]", "\\]")
+        for _session_id, entry in sorted(
+            notes.items(),
+            key=lambda pair: (
+                created_time(pair[1].get("created")) or datetime.max.replace(tzinfo=timezone.utc),
+                pair[1]["file"].casefold(),
+            ),
+        ):
+            title = entry["title"].replace("[", "(").replace("]", ")").replace("|", "-")
+            stamp = created_time(entry.get("created"))
+            date = stamp.strftime("%Y-%m-%d %H:%M:%S UTC") if stamp else "Unknown date"
+            target = Path(entry["file"]).stem
             lines.append(
-                f"- [{title} · {session_id[:8]}]({quote(entry['file'])}) — {entry['messages']} messages"
+                f"- {date} — [[{target}|{title}]] — {entry['messages']} messages"
             )
         if unsupported:
             lines.extend(

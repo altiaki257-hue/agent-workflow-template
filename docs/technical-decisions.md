@@ -1,5 +1,9 @@
 # Technical decisions
 
+## LOG-003: Stable chronological archive filenames
+
+Owner-authorized 2026-10-20. Use UTC creation timestamps, safe readable titles and a deterministic short identity suffix. Store the assigned filename separately from the display title so incremental updates and title changes cannot create duplicates. Sort the index by normalized creation time and use wikilinks. Migrate owned legacy notes without overwriting destinations or annotations; keep cached notes when source transcripts disappear. Live migration uses Obsidian-aware renames for backlinks and matching cloud item renames. No model calls, new package or change to curated project-note naming is needed.
+
 ## LOG-002: Opt-in archive sync through the existing plugin
 
 Owner-authorized 2026-10-20. Keep the exporter local by default. Opt-in cloud sync uses a fixed Obsidian CLI command after verifying the open vault path, so no cloud SDK or credentials enter the exporter. Dispatch failures record a deferred request and cannot invalidate archived notes. Plugin startup/periodic timers handle closed-app catch-up and transfer failures. Acknowledgement means requested, not delivered. Remotely Save 0.5.25's on-save handler checks the active note, so it cannot replace explicit dispatch for background exports. No inference or new package dependency is introduced.

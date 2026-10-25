@@ -13,6 +13,7 @@ from scripts.export_codex_chats import (
     managed_write,
     parse_transcript,
     redact,
+    readable_filename,
     request_remote_sync,
     safe_path,
     sync,
@@ -50,6 +51,111 @@ class ChatExportTests(unittest.TestCase):
         (path or self.source).write_text(
             "\n".join(json.dumps(row) for row in events) + "\n", encoding="utf-8"
         )
+
+    def exported_note(self, session_id="session-123"):
+        state = json.loads((self.root / "state/manifest.json").read_text())
+        entry = next(e for e in state["files"].values() if e["session_id"] == session_id)
+        return self.vault / "AI Conversations/Codex" / entry["file"]
+
+    def legacy_note(self):
+        note = self.vault / "AI Conversations/Codex/session-123.md"
+        managed_write(
+            note, "session-123",
+            "# Legacy title\n\n- **Created:** 2026-10-17T01:00:00Z\n\n## User\nQuestion",
+        )
+        note.write_text(note.read_text(encoding="utf-8") + "Keep my annotation.\n", encoding="utf-8")
+        state = self.root / "state/manifest.json"
+        state.parent.mkdir(parents=True, exist_ok=True)
+        state.write_text(json.dumps({"files": {str(self.source.resolve()): {
+            "session_id": "session-123", "file": note.name, "title": "Legacy title",
+            "messages": 1, "signature": None,
+        }}}))
+        return note
+
+    def test_readable_names_are_safe_utc_and_distinct(self):
+        filename = readable_filename("2026-10-20T09:30:00+13:00", "Sync: notes / safely?", "one")
+        self.assertRegex(filename, r"^2026-10-19 20-30-00 UTC - Sync notes safely - [a-f0-9]{8}\.md$")
+        self.assertNotEqual(filename, readable_filename("2026-10-20T09:30:00+13:00", "Sync: notes / safely?", "two"))
+        self.assertTrue(readable_filename("bad date", "A title", "one").startswith("Undated - "))
+        large = readable_filename("2026-10-20", "\U0001f600" * 1000, "one")
+        self.assertLess(len(large.encode("utf-8")), 255)
+        secret = "gsk_" + "a" * 32
+        self.assertNotIn(secret, readable_filename("2026-10-20", secret, "one"))
+        self.assertNotIn("example.org", readable_filename("", "Visit https://example.org/private?token=value", "one"))
+
+    def test_legacy_note_migrates_with_annotation_and_stays_stable_on_title_change(self):
+        self.write_events([self.metadata, self.native("user", "Readable question", "u1")])
+        old = self.legacy_note()
+        first = sync(self.config)
+        note = self.exported_note()
+        self.assertEqual(1, first["renamed"])
+        self.assertFalse(old.exists())
+        self.assertIn("Readable question", note.name)
+        self.assertIn("Keep my annotation.", note.read_text(encoding="utf-8"))
+        with patch("scripts.export_codex_chats.emdash_metadata", return_value=({"session-123": {"title": "Changed title"}}, 0, 0)):
+            self.assertEqual(0, sync(self.config)["renamed"])
+        self.assertEqual(note, self.exported_note())
+        self.assertIn("# Changed title", note.read_text(encoding="utf-8"))
+
+    def test_legacy_note_without_transcript_is_preserved_and_migrated(self):
+        old = self.legacy_note()
+        before = old.read_bytes()
+        result = sync(self.config)
+        self.assertEqual(0, result["errors"])
+        self.assertEqual(1, result["renamed"])
+        self.assertEqual(before, self.exported_note().read_bytes())
+        self.assertEqual(0, sync(self.config)["renamed"])
+
+    def test_rename_refuses_collision_and_invalid_ownership(self):
+        self.write_events([self.metadata, self.native("user", "Question", "u1")])
+        old = self.legacy_note()
+        target = old.parent / readable_filename(self.metadata["payload"]["timestamp"], "Question", "session-123")
+        target.write_text("Unrelated note", encoding="utf-8")
+        original = old.read_bytes()
+        self.assertGreater(sync(self.config)["errors"], 0)
+        self.assertEqual(original, old.read_bytes())
+        self.assertEqual("Unrelated note", target.read_text(encoding="utf-8"))
+        target.unlink()
+        old.write_text("Manually replaced ownership markers", encoding="utf-8")
+        self.assertGreater(sync(self.config)["errors"], 0)
+        self.assertTrue(old.exists())
+        self.assertFalse(target.exists())
+
+    def test_index_orders_by_creation_time_and_uses_readable_wikilinks(self):
+        later = {**self.metadata, "payload": {**self.metadata["payload"], "id": "a-later", "timestamp": "2026-10-19T01:00:00Z"}}
+        earlier = {**self.metadata, "payload": {**self.metadata["payload"], "id": "z-earlier", "timestamp": "2026-10-18T01:00:00Z"}}
+        self.write_events([later, self.native("user", "Later question", "u1")])
+        self.write_events([earlier, self.native("user", "Earlier question", "u2")], self.codex / "sessions/earlier.jsonl")
+        sync(self.config)
+        index = (self.vault / "AI Conversations/Codex/Index.md").read_text(encoding="utf-8")
+        self.assertLess(index.index("Earlier question"), index.index("Later question"))
+        self.assertIn("[[" + self.exported_note("z-earlier").stem + "|Earlier question]]", index)
+        self.assertEqual(sorted([self.exported_note("z-earlier").name, self.exported_note("a-later").name])[0], self.exported_note("z-earlier").name)
+
+    def test_injected_rename_failure_does_not_rewrite_or_delete_note(self):
+        self.write_events([self.metadata, self.native("user", "Question", "u1")])
+        old = self.legacy_note()
+        before = old.read_bytes()
+        with patch("scripts.export_codex_chats.os.link", side_effect=OSError("unavailable")):
+            self.assertGreater(sync(self.config)["errors"], 0)
+        self.assertEqual(before, old.read_bytes())
+
+    def test_retry_recovers_rename_completed_before_state_was_saved(self):
+        self.write_events([self.metadata, self.native("user", "Question", "u1")])
+        old = self.legacy_note()
+
+        def interrupted_rename(source, target):
+            source.rename(target)
+            raise OSError("interrupted before state update")
+
+        self.assertGreater(sync(self.config, rename_note=interrupted_rename)["errors"], 0)
+        self.assertFalse(old.exists())
+        result = sync(self.config)
+        self.assertEqual(0, result["errors"])
+        self.assertIn("Keep my annotation.", self.exported_note().read_text(encoding="utf-8"))
+        self.assertEqual(2, len(list(self.exported_note().parent.glob("*.md"))))
+        index = (self.exported_note().parent / "Index.md").read_text(encoding="utf-8")
+        self.assertIn("[[" + self.exported_note().stem + "|Question]]", index)
 
     @staticmethod
     def native(role, text, message_id):
@@ -294,7 +400,7 @@ class ChatExportTests(unittest.TestCase):
         )
         self.write_events([self.metadata, self.native("user", "New live copy", "u1")])
         self.assertEqual(0, sync(self.config)["errors"])
-        text = (self.vault / "AI Conversations/Codex/session-123.md").read_text(
+        text = self.exported_note().read_text(
             encoding="utf-8"
         )
         self.assertIn("New live copy", text)
@@ -327,7 +433,7 @@ class ChatExportTests(unittest.TestCase):
         self.write_events([self.metadata, self.native("user", "Question", "u1")])
         first = sync(self.config)
         self.assertEqual(1, first["notes"])
-        note = self.vault / "AI Conversations/Codex/session-123.md"
+        note = self.exported_note()
         before = note.stat().st_mtime_ns
         self.assertEqual(0, sync(self.config)["updated"])
         self.assertEqual(before, note.stat().st_mtime_ns)

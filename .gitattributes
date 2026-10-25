@@ -8,3 +8,4 @@
 *.yaml text eol=lf
 *.py text eol=lf
 *.ps1 text eol=lf
+.agents/skills/** text=auto eol=lf

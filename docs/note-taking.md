@@ -20,6 +20,8 @@ Existing changed settings are backed up outside the vault under `%LOCALAPPDATA%/
 
 ## Retrieval and maintenance
 
+Conversation logs use the date/time-first naming scheme in [archive operations](chat-archive.md): `YYYY-MM-DD HH-mm-ss UTC - Descriptive title - short-id.md`. Their index and file-name ascending order are chronological. The exporter assigns stable names and updates the manifest; do not manually rename those files without updating the mapping. Curated briefs, decisions, handoffs and templates retain their existing descriptive naming conventions. An archive naming guide in the vault explains this distinction for future note maintenance.
+
 Search the relevant curated folder with a small result limit; open only relevant notes and follow source links to current Git records. At a substantive handoff, reuse the current task context to record the result, decisions, checks and unresolved risks. Avoid a separate model call to summarize the same task. Keep raw outputs, secrets and internal reasoning out of notes. Mark proposals and superseded decisions explicitly.
 
 The installed `project-notes` skill supplies this workflow. Selected upstream `obsidian-markdown`, `obsidian-cli` and `obsidian-bases` skills were installed from `kepano/obsidian-skills` commit `3ccff5338ea700537839b21900aa5358a0402c98`. They are task-triggered references, not material to inject into every prompt. The local skill source is [versioned here](../skills/project-notes/SKILL.md); copy updates to the user skill directory when maintaining it. New skills become available on the next turn.

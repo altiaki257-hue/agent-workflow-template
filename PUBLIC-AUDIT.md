@@ -1,5 +1,13 @@
 # Public-copy audit
 
+## Refresh on 2026-10-25
+
+PUBLIC-002 adds reusable chronological archive naming, exporter type corrections and fourteen task-scoped skills. It preserves this public repository's history and neutral author identity; private history/task records, local archives, credentials and machine configuration remain excluded. Existing sanitized source pages and reset status/backlog are retained. New documentation describes optional setup without claiming a connected installation.
+
+Imported skill licenses and source/installed hashes are retained. Unlike the initial text-only snapshot below, this update includes reviewed upstream branding PNG assets and a JSON provenance receipt. No executable, desktop capture, dependency cache or machine authentication is included. Verification and publication references are recorded in [the PUBLIC-002 handoff](tasks/handoffs/PUBLIC-002-update-to-owner.md); checks are pending until that record confirms their results. Independent review remains pending.
+
+## Initial snapshot audit
+
 This is a fresh, sanitized source snapshot. After reviewing the prepared copy, the owner authorized committing it and publishing it to a separate public GitHub repository. Original private history, account state and credentials remain excluded.
 
 ## Scope and exclusions
