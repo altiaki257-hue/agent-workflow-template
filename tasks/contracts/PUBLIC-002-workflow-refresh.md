@@ -1,13 +1,13 @@
 # PUBLIC-002: Refresh reusable archive and agent skills
 
-- Status: review
+- Status: done
 - Assigned role: Codex
 - Branch: `chore/PUBLIC-002-workflow-refresh`
 - Worktree: separate public-template publication worktree
 - Base commit: `ae3821e` (existing public snapshot)
-- Implementation commits: `uncommitted`
+- Implementation commits: `519f8fe5c91ff76d59adfe3cc8fc53e1c0694426`; a later documentation commit records verified publication
 - Reviewer: independent review pending
-- Integration commit: not integrated
+- Integration commit: `519f8fe5c91ff76d59adfe3cc8fc53e1c0694426`, verified on remote main and the local main checkout
 - Git approval: owner explicitly requested committing the pending changes to both the main and existing public repositories; commit, push and main integration are authorized
 - Updated: 2026-10-25
 
@@ -20,7 +20,7 @@ Publish the reusable archive naming/type fixes and fourteen agent skills while p
 - [x] Archive changes and fourteen skills are present with upstream licenses and matching provenance hashes.
 - [x] Existing public identity, README setup, reset status/backlog and sanitized source references remain intact.
 - [x] Complete quality checks and intended-change privacy checks pass.
-- [ ] Commit is verified on public main; review status and verification are reported accurately.
+- [x] Commit is verified on public main; review status and verification are reported accurately.
 
 ## Verification and handoff
 
