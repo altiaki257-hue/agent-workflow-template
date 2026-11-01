@@ -2,5 +2,5 @@ pre-commit==4.7.0
 ruff==0.17.1
 basedpyright==1.40.2
 hypothesis==6.170.1
-coverage==7.16.2
+coverage==7.17.0
 -r requirements-observability.txt
